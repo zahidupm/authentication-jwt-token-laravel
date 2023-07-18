@@ -90,4 +90,17 @@ class UserController extends Controller
         }
     }
 
+    public function resetPassword(Request $request){
+        try {
+            $email = $request->header('email');
+            // new password
+            $password = $request->input('password');
+            User::where('email', '=', $email)->update(['password'=>  bcrypt($password)]);
+            return response()->json(['success' => true, 'message' =>'Password updated successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 401);
+        }
+
+    }
+
 }
