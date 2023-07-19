@@ -20,5 +20,6 @@ class DatabaseSeeder extends Seeder
              'email' => 'admin@inventory.com',
              'password' => bcrypt('123456'),
          ]);
+         
     }
 }

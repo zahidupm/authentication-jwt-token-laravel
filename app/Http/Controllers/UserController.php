@@ -12,6 +12,27 @@ use Mockery\Exception;
 
 class UserController extends Controller
 {
+
+    public  function  loginPage(){
+        return view('pages.auth.login-page');
+    }
+
+    public function registrationPage(){
+        return view('pages.auth.registration-page');
+    }
+
+    public function sendOtpPage(){
+        return view('pages.auth.send-otp-page');
+    }
+
+    public function verifyOtpPage(){
+        return view('pages.auth.verify-otp-page');
+    }
+
+    public function resetPasswordPage(){
+        return view('pages.auth.reset-pass-page');
+    }
+
     public  function index(Request $request){
 
         try {
@@ -23,7 +44,7 @@ class UserController extends Controller
                 'password' => $request->input('password'),
             ]);
 
-            return response()->json(['message' => 'User Created Successfully'], 201);
+            return response()->json(['status' => 'success', 'message' => 'User Created Successfully'], 201);
         } catch (Exception $e){
             return response()->json(['status' => 'failed','message' => $e->getMessage() ]);
         }
@@ -41,7 +62,7 @@ class UserController extends Controller
 
         $token = JWTToken::createToken($user);
 
-        return response()->json(['status' =>'success', 'token' => $token], 200);
+        return response()->json(['status' =>'success', 'token' => $token], 200)->cookie('token', $token, 60*24*30);
 
 //            $result = User::where('email', '=', $request->email)->where('password', '=', $hash)
 //            ->count();
@@ -78,7 +99,7 @@ class UserController extends Controller
             User::where('email', '=', $email)->update(['otp' => '0']);
             // password reset token issue
             $token = JWTToken::createTokenResetPassword($email);
-            return response()->json(['status' =>'success','message' => 'OTP Verified Successfully', 'token' => $token], 200);
+            return response()->json(['status' =>'success','message' => 'OTP Verified Successfully', 'token' => $token], 200)->cookie('token', $token, 60*24*30);
 //            $user = User::where('email', '=', $email)->first();
 //            if($user->otp == $otp){
 //                return response()->json(['status' =>'success','message' => 'OTP Verified Successfully'], 200);
