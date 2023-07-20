@@ -124,4 +124,8 @@ class UserController extends Controller
 
     }
 
+    public function logout() {
+        return redirect('/userLogin')->cookie('token','', -1);
+    }
+
 }

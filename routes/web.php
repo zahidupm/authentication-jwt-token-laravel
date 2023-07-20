@@ -27,6 +27,9 @@ Route::post('/send-otp', [UserController::class, 'sendOTPCode']);
 Route::post('/verify-otp', [UserController::class, 'verifyOTPCode']);
 Route::post('/reset-password', [UserController::class, 'resetPassword'])->middleware([TokenVerification::class]);
 
+// userLogout
+Route::get('logout', [UserController::class, 'logout']);
+
 //page rroutes
 Route::get('/userLogin', [UserController::class, 'loginPage']);
 Route::get('/userRegister', [UserController::class, 'registrationPage']);
