@@ -60,7 +60,7 @@ class UserController extends Controller
             return response()->json(['status' => 'failed','message' => 'Invalid Credentials'], 401);
         }
 
-        $token = JWTToken::createToken($user);
+        $token = JWTToken::createToken($user, $user->id);
 
         return response()->json(['status' =>'success', 'token' => $token], 200)->cookie('token', $token, 60*24*30);
 
@@ -124,8 +124,48 @@ class UserController extends Controller
 
     }
 
+    public function profilePage(){
+        return view('pages.dashboard.profile-page');
+    }
+
     public function logout() {
         return redirect('/userLogin')->cookie('token','', -1);
+    }
+
+    function userProfile(Request $request){
+        $email=$request->header('email');
+        $user=User::where('email','=',$email)->first();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Request Successful',
+            'data' => $user
+        ],200);
+    }
+
+    function updateProfile(Request $request){
+        try{
+            $email=$request->header('email');
+            $firstName=$request->input('firstName');
+            $lastName=$request->input('lastName');
+            $mobile=$request->input('mobile');
+            $password=Hash::check($request->input('password'));
+            User::where('email','=',$email)->update([
+                'firstName'=>$firstName,
+                'lastName'=>$lastName,
+                'mobile'=>$mobile,
+                'password'=>$password
+            ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Request Successful',
+            ],200);
+
+        }catch (Exception $exception){
+            return response()->json([
+                'status' => 'fail',
+                'message' => 'Something Went Wrong',
+            ],200);
+        }
     }
 
 }

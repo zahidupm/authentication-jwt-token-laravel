@@ -19,9 +19,10 @@ class TokenVerification
         $token = $request->cookie('token');
         $result = JWTToken::verifyToken($token);
         if ($result == 'unauthorized') {
-            return response()->json(['status' => 'success','message' => 'Invalid token'], 401);
+            return redirect('/userLogin');
         }
         $request->headers->set('email', $result);
+        $request->headers->set('id',$result->userID);
         return $next($request);
 
     }
