@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PromotionalMailController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\TokenVerification;
 use Illuminate\Support\Facades\Route;
@@ -41,5 +44,17 @@ Route::get('/resetPass', [UserController::class, 'resetPasswordPage']);
 Route::get('/dashboard', [DashboardController::class, 'dashboardPage']);
 
 Route::get('/userProfile', [UserController::class, 'profilePage']);
+Route::get('/categoryPage', [CategoryController::class, 'categoryPage']);
+
+// catetory
+Route::post('create-category', [CategoryController::class, 'categoryCreate']);
+Route::get('list-category', [CategoryController::class, 'categoryList']);
+Route::post('delete-category', [CategoryController::class, 'categoryDelete']);
+Route::post('update-category', [CategoryController::class, 'categoryUpdate']);
+
+Route::resource('customer', CustomerController::class);
+
+Route::post( '/promotional/mail', [PromotionalMailController::class, 'sendPromotionMail'] )->name( 'promotion.mail' );
+Route::get( '/promotional/mail', [PromotionalMailController::class, 'promotionPage'] )->name( 'promotion.page' );
 
 
